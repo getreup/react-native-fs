@@ -267,7 +267,7 @@ RCT_EXPORT_METHOD(downloadFile:(NSDictionary *)options
 
   params.completeCallback = ^(NSNumber* statusCode, NSNumber* bytesWritten) {
     NSMutableDictionary* result = [[NSMutableDictionary alloc] initWithDictionary: @{@"jobId": jobId,
-                                                                                     @"statusCode": statusCode}];
+                                                                                     @"statusCode": statusCode ? statusCode : @(0)}];
     if (bytesWritten) {
       [result setObject:bytesWritten forKey: @"bytesWritten"];
     }
@@ -281,7 +281,7 @@ RCT_EXPORT_METHOD(downloadFile:(NSDictionary *)options
   params.beginCallback = ^(NSNumber* statusCode, NSNumber* contentLength, NSDictionary* headers) {
     [self.bridge.eventDispatcher sendAppEventWithName:[NSString stringWithFormat:@"DownloadBegin-%@", jobId]
                                                  body:@{@"jobId": jobId,
-                                                        @"statusCode": statusCode,
+                                                        @"statusCode": statusCode ? statusCode : @(0),
                                                         @"contentLength": contentLength,
                                                         @"headers": headers}];
   };
